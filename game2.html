@@ -25,7 +25,15 @@
       <div class="section-row">
         <section class="panel">
           <div class="panel-title">라운드 진행</div>
-          <div style="font-size:0.85rem;">
+         
+       <!-- 🔹 추가: 시작 점수 입력 -->
+         <div class="field-group">
+          <span class="field-label">오리지널 점수</span>
+           <input id="g2-startScore" type="number"
+           class="field-input-number" value="0">
+         </div>
+
+        <div style="font-size:0.85rem;">
             <div>현재 라운드: <span id="g2-round">1</span> / 2</div>
             <div>총 점수(내부): <span id="g2-totalScore">0</span></div>
             <div>남은 야바위 셔플: <span id="g2-posShuffleLeft">3</span></div>

@@ -25,14 +25,14 @@ document.addEventListener("DOMContentLoaded", () => {
       statusEl.textContent = "최소 1명 이상의 선수를 입력하세요.";
       return;
     }
-    if (raw.length > 7) {
-      statusEl.textContent = "최대 7명까지만 가능합니다.";
+    if (raw.length > 5) {
+      statusEl.textContent = "최대 5명까지만 가능합니다.";
       return;
     }
 
     const n = parseInt(spinCountEl.value, 10);
-    if (Number.isNaN(n) || n < 1 || n > 25) {
-      statusEl.textContent = "회전 횟수는 1~25 사이의 숫자여야 합니다.";
+    if (Number.isNaN(n) || n < 1 || n > 15) {
+      statusEl.textContent = "코인은 1~15 사이의 숫자여야 합니다.";
       return;
     }
 

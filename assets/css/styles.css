@@ -234,7 +234,7 @@ textarea.field-input:focus {
 /* ===== 게임 1: 슈퍼 골 럭키샷 ===== */
 .goal-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   margin-top: 8px;
 }

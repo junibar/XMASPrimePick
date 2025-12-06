@@ -9,9 +9,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const finalEl = document.getElementById("g2-final");
   const rewardShuffleBtn = document.getElementById("g2-rewardShuffleBtn");
   const posShuffleBtn = document.getElementById("g2-positionShuffleBtn");
-
+  const startScoreEl = document.getElementById("g2-startScore");  // 있을 수도, 없을 수도 있다고 보고
   const REWARD_POOL = ["+1", "+3", "+5", "x2", "MISS"];
 
+  let baseScore = 0;           // 추가: 시작 점수
   let totalScore = 0;
   let chosenRewards = [];   // 실제로 연 박스의 보상 기록
 
@@ -74,6 +75,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function onBoxClick(boxId) {
     if (gameState.hasOpenedThisRound) return;
+
+    // 🔹추가: 게임 전체에서 첫 박스를 여는 순간 시작 점수 반영
+    if (gameState.round === 1 && chosenRewards.length === 0) {
+    const raw = parseInt(startScoreEl.value, 10);
+    baseScore = Number.isNaN(raw) ? 0 : raw;
+    totalScore = baseScore;
+    totalScoreEl.textContent = totalScore.toString();
+   }
+
     const outcome = gameState.boxMapping[boxId];
 
     // 내부 합산용 점수
@@ -188,9 +198,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     finalEl.innerHTML = `
       <strong>게임 최종 결과</strong><br>
-      이번 게임에서 연 박스 보상: <strong>${display}</strong><br>
-      <small>내부 합산 점수: ${totalScore}점</small>
-    `;
+      초기 점수: ${baseScore}점<br>
+      박스 보상 적용 후 최종 점수: <strong>${totalScore}점</strong><br>
+      이번 게임에서 연 박스 보상: <strong>${display}</strong>
+     `;
   }
 
   function rewardShuffle() {
