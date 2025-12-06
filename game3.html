@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>✨ 아이콘 빠칭코</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div class="snow-overlay"></div>
+  <div class="main-container">
+    <div class="page-card">
+      <div class="top-controls">
+        <button class="home-btn" onclick="goHome()">🏠 홈으로</button>
+        <button class="reset-btn" onclick="resetGame()">🔄 게임 리셋</button>
+      </div>
+
+      <header class="page-header">
+        <h1 class="page-title">✨ 아이콘 빠칭코</h1>
+        <p class="page-subtitle">
+          최대 7명의 선수를 입력하고, 회전 횟수(1~25회)를 정한 뒤<br>
+          레버를 당겨 빠칭코처럼 아이콘을 쌓아가는 게임입니다.
+        </p>
+      </header>
+
+      <!-- 상단: 왼쪽 설정 / 오른쪽 실시간 선수 결과 -->
+      <div class="section-row">
+        <section class="panel">
+          <div class="panel-title">선수 & 회전 설정</div>
+          <div class="field-group">
+            <span class="field-label">선수 이름 (최대 7명)</span>
+            <textarea id="g3-playerInput" rows="3" class="field-input"
+              placeholder="쉼표(,)로 구분해서 입력하세요. 예) 손흥민, 홀란, 음바페"></textarea>
+          </div>
+          <div class="field-group">
+            <span class="field-label">회전 횟수 (1 ~ 25)</span>
+            <input id="g3-spinCount" type="number" min="1" max="25"
+              class="field-input-number" value="10">
+          </div>
+          <button class="btn-primary" id="g3-applySettings">설정 적용</button>
+          <div class="result-block" id="g3-status" style="margin-top:10px;">
+            선수와 회전 횟수를 설정한 뒤 레버를 당겨보세요.
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title">선수 결과 (실시간)</div>
+          <div id="g3-final" class="player-result-list">
+            <!-- 매 스핀마다 갱신 -->
+          </div>
+        </section>
+      </div>
+
+      <!-- 하단: 전체 폭 빠칭코 보드 & 레버 -->
+      <section class="panel" style="margin-top:16px;">
+        <div class="panel-title">빠칭코 보드 & 레버</div>
+        <div class="roulette-wrapper">
+          <div class="pachinko-board" id="g3-board">
+            <!-- JS로 컬럼 생성 -->
+          </div>
+          <div>남은 회전: <span id="g3-remaining">0</span></div>
+
+          <div class="lever">
+            <button id="g3-leverBtn" class="lever-button disabled"></button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/game3.js"></script>
+</body>
+</html>

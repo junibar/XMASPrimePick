@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>🃏 업사이드 다운 드래프트</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div class="snow-overlay"></div>
+  <div class="main-container">
+    <div class="page-card">
+      <div class="top-controls">
+        <button class="home-btn" onclick="goHome()">🏠 홈으로</button>
+        <button class="reset-btn" onclick="resetGame()">🔄 게임 리셋</button>
+      </div>
+
+      <header class="page-header">
+        <h1 class="page-title">🃏 업사이드 다운 드래프트</h1>
+        <p class="page-subtitle">
+          5×5 카드에서 7장을 뒤집고,<br>
+          인접 숫자–권리 조합으로 최적의 권리를 선택하는 카드 드래프트 게임.
+        </p>
+      </header>
+
+      <div class="section-row">
+        <section class="panel">
+          <div class="panel-title">카드 그리드 (7장까지 뒤집기)</div>
+          <div class="grid-5x5" id="g4-grid"></div>
+          <div class="result-block" style="margin-top:10px;">
+            뒤집은 카드 수: <span id="g4-flipCount">0</span> / 7
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title">뒤집은 카드 시퀀스</div>
+          <div id="g4-seq" style="font-size:0.8rem; min-height:60px;"></div>
+          <hr style="border-color:rgba(255,255,255,0.1); margin:8px 0;">
+          <div class="panel-title">가능한 권리 후보</div>
+          <div id="g4-candidates" style="font-size:0.8rem;"></div>
+          <button class="btn-primary" id="g4-calcBtn" style="margin-top:8px;">
+            가능한 권리 계산
+          </button>
+          <div class="result-block" id="g4-final" style="margin-top:8px;">
+            7장을 모두 뒤집은 뒤, 후보를 계산하고 최종 권리를 선택하세요.
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/game4.js"></script>
+</body>
+</html>

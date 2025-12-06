@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>⚽ 슈퍼 골 럭키샷</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div class="snow-overlay"></div>
+  <div class="main-container">
+    <div class="page-card">
+      <div class="top-controls">
+        <button class="home-btn" onclick="goHome()">🏠 홈으로</button>
+        <button class="reset-btn" onclick="resetGame()">🔄 게임 리셋</button>
+      </div>
+
+      <header class="page-header">
+        <h1 class="page-title">⚽ 슈퍼 골 럭키샷</h1>
+        <p class="page-subtitle">
+          4구역 중 하나를 선택해 슈팅! 골이면 계속, 실패하면 게임 종료.<br>
+          같은 종류 골이 2연속 이상이면 콤보 보너스 +1.
+        </p>
+      </header>
+
+      <div class="section-row">
+        <section class="panel">
+          <div class="panel-title">골대 선택</div>
+          <p style="font-size:0.8rem; margin-bottom:6px;">
+            각 턴마다 내부적으로 일반골 2칸, 슈퍼골 1칸, 실패 1칸이 섞입니다.
+          </p>
+          <div class="goal-grid">
+            <button class="goal-cell" data-slot="1">1</button>
+            <button class="goal-cell" data-slot="2">2</button>
+            <button class="goal-cell" data-slot="3">3</button>
+            <button class="goal-cell" data-slot="4">4</button>
+          </div>
+
+          <div class="result-block" id="g1-status" style="margin-top:12px;">
+            슛을 시도해보세요!
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title">게임 정보</div>
+          <div style="font-size:0.85rem;">
+            <div>총 슛 횟수: <span id="g1-totalShots">0</span></div>
+            <div>성공(골+슈퍼골): <span id="g1-totalGoals">0</span></div>
+            <div>현재 점수: <span id="g1-score">0</span></div>
+            <div>최대 콤보: <span id="g1-maxCombo">0</span></div>
+          </div>
+          <hr style="border-color:rgba(255,255,255,0.1); margin:8px 0;">
+          <div class="panel-title">로그</div>
+          <div class="game-log" id="g1-log"></div>
+        </section>
+      </div>
+
+      <div class="result-block" id="g1-final" style="display:none; margin-top:18px;">
+        <!-- 최종 결과 표시 영역 -->
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/game1.js"></script>
+</body>
+</html>

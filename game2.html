@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>🎁 크리스마스 도파민 박스</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div class="snow-overlay"></div>
+  <div class="main-container">
+    <div class="page-card">
+      <div class="top-controls">
+        <button class="home-btn" onclick="goHome()">🏠 홈으로</button>
+        <button class="reset-btn" onclick="resetGame()">🔄 게임 리셋</button>
+      </div>
+
+      <header class="page-header">
+        <h1 class="page-title">🎁 크리스마스 도파민 박스</h1>
+        <p class="page-subtitle">
+          1게임은 2라운드! 각 라운드마다 선물 박스 3개 중 하나를 열고,<br>
+          한 번의 보상 셔플과 야바위 셔플로 도파민을 뽑아보세요.
+        </p>
+      </header>
+
+      <div class="section-row">
+        <section class="panel">
+          <div class="panel-title">라운드 진행</div>
+          <div style="font-size:0.85rem;">
+            <div>현재 라운드: <span id="g2-round">1</span> / 2</div>
+            <div>총 점수(내부): <span id="g2-totalScore">0</span></div>
+            <div>남은 야바위 셔플: <span id="g2-posShuffleLeft">3</span></div>
+            <div>보상 셔플 사용 여부: <span id="g2-rewardShuffled">❌</span></div>
+          </div>
+
+          <div class="box-row" id="g2-boxRow">
+            <div class="gift-box" data-box="1">
+              <div class="gift-label">BOX 1</div>
+            </div>
+            <div class="gift-box" data-box="2">
+              <div class="gift-label">BOX 2</div>
+            </div>
+            <div class="gift-box" data-box="3">
+              <div class="gift-label">BOX 3</div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn-primary" id="g2-rewardShuffleBtn">♻️ 보상 셔플</button>
+            <button class="btn-ghost" id="g2-positionShuffleBtn">🔀 야바위 셔플</button>
+          </div>
+
+          <div class="result-block" id="g2-roundStatus" style="margin-top:12px;">
+            라운드 1: 박스를 선택해보세요.
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title">라운드 요약</div>
+          <div id="g2-roundSummary" style="font-size:0.8rem;"></div>
+          <hr style="border-color:rgba(255,255,255,0.1); margin:8px 0;">
+          <div class="panel-title">게임 최종 결과</div>
+          <div id="g2-final" class="result-block" style="font-size:0.85rem;">
+            아직 게임이 진행 중입니다.
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/game2.js"></script>
+</body>
+</html>
