@@ -135,10 +135,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function generateDeck() {
     const deck = [];
-    // 권리 카드: 아이콘 3, 드래프트 4, 자유 4, 스카우터 4 (총 15장)
-    pushMany(deck, { type: "right", value: "아이콘 드래프트" }, 3);
-    pushMany(deck, { type: "right", value: "드래프트" }, 4);
-    pushMany(deck, { type: "right", value: "자유 트레이드" }, 4);
+    // 권리 카드: 아이콘 2, 드래프트 3, 자유 3,  트레이드 3, 스카우터 4 (총 15장)
+    pushMany(deck, { type: "right", value: "아이콘 드래프트" }, 2);
+    pushMany(deck, { type: "right", value: "드래프트" }, 3);
+    pushMany(deck, { type: "right", value: "자유 트레이드" }, 3);
+    pushMany(deck, { type: "right", value: "트레이드" }, 3);
     pushMany(deck, { type: "right", value: "스카우터" }, 4);
 
     // 숫자 카드: 1×4, 2×3, 3×2, 4×1 (총 10장)
@@ -163,3 +164,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 });
+
