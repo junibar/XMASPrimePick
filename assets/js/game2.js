@@ -9,24 +9,27 @@ document.addEventListener("DOMContentLoaded", () => {
   const finalEl = document.getElementById("g2-final");
   const rewardShuffleBtn = document.getElementById("g2-rewardShuffleBtn");
   const posShuffleBtn = document.getElementById("g2-positionShuffleBtn");
-  const startScoreEl = document.getElementById("g2-startScore");  // 있을 수도, 없을 수도 있다고 보고
+  const startScoreEl = document.getElementById("g2-startScore"); // 시작 점수 입력 (없으면 null)
+
   const REWARD_POOL = ["+1", "+3", "+5", "x2", "MISS"];
 
-  let baseScore = 0;           // 추가: 시작 점수
+  let baseScore = 0;          // 시작 점수
   let totalScore = 0;
-  let chosenRewards = [];   // 실제로 연 박스의 보상 기록
+  let chosenRewards = [];     // 실제로 연 박스의 보상 기록
 
   let gameState = {
     round: 1,
-    boxMapping: {}, // {1: "+1", 2: "MISS", 3:"x2"}
+    boxMapping: {},           // {1: "+1", 2:"MISS", 3:"x2"}
     hasOpenedThisRound: false,
     hasUsedRewardShuffle: false,
     positionShuffleLeft: 3,
     logs: []
   };
 
+  // 초기 라운드 세팅
   initRound();
 
+  // 박스 클릭
   boxElems.forEach(box => {
     box.addEventListener("click", () => {
       const id = parseInt(box.dataset.box, 10);
@@ -34,15 +37,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // 보상 셔플 (새 보상 구성)
   rewardShuffleBtn.addEventListener("click", () => {
     rewardShuffle();
   });
 
+  // 위치 셔플 (야바위)
   posShuffleBtn.addEventListener("click", () => {
     positionShuffle();
   });
 
+  // ----------------- 라운드 초기화 -----------------
   function initRound() {
+    // 보상 3개 랜덤 선택
     const pool = [...REWARD_POOL];
     const selected = [];
     while (selected.length < 3) {
@@ -50,6 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
       selected.push(pool.splice(idx, 1)[0]);
     }
     shuffle(selected);
+
     gameState.boxMapping = {
       1: selected[0],
       2: selected[1],
@@ -62,9 +70,11 @@ document.addEventListener("DOMContentLoaded", () => {
     posShuffleLeftEl.textContent = gameState.positionShuffleLeft.toString();
     rewardShuffledEl.textContent = gameState.hasUsedRewardShuffle ? "✅" : "❌";
 
+    // 박스 비주얼 리셋
     boxElems.forEach(b => {
       b.classList.remove("opened");
       const label = b.querySelector(".gift-label");
+      label.classList.remove("dimmed");
       label.textContent = `BOX ${b.dataset.box}`;
       const outcomeEl = b.querySelector(".gift-outcome");
       if (outcomeEl) outcomeEl.remove();
@@ -73,30 +83,31 @@ document.addEventListener("DOMContentLoaded", () => {
     roundStatusEl.textContent = `라운드 ${gameState.round}: 박스를 선택하세요.`;
   }
 
+  // ----------------- 박스 클릭 처리 -----------------
   function onBoxClick(boxId) {
     if (gameState.hasOpenedThisRound) return;
 
-    // 🔹추가: 게임 전체에서 첫 박스를 여는 순간 시작 점수 반영
-    if (gameState.round === 1 && chosenRewards.length === 0) {
-    const raw = parseInt(startScoreEl.value, 10);
-    baseScore = Number.isNaN(raw) ? 0 : raw;
-    totalScore = baseScore;
-    totalScoreEl.textContent = totalScore.toString();
-   }
+    // 게임 전체에서 첫 박스를 여는 순간 시작 점수 적용
+    if (gameState.round === 1 && chosenRewards.length === 0 && startScoreEl) {
+      const raw = parseInt(startScoreEl.value, 10);
+      baseScore = Number.isNaN(raw) ? 0 : raw;
+      totalScore = baseScore;
+      totalScoreEl.textContent = totalScore.toString();
+    }
 
     const outcome = gameState.boxMapping[boxId];
 
-    // 내부 합산용 점수
+    // 점수 적용
     applyReward(outcome);
-    // 실제로 플레이어가 얻은 박스 보상 기록
     chosenRewards.push(outcome);
-
     gameState.hasOpenedThisRound = true;
 
-    const selectedBox = [...boxElems].find(b => parseInt(b.dataset.box, 10) === boxId);
+    const selectedBox = [...boxElems].find(
+      b => parseInt(b.dataset.box, 10) === boxId
+    );
     openBoxVisual(selectedBox, outcome);
 
-    // 나머지 박스도 결과 표시
+    // 나머지 박스도 결과만 공개 (이름 없이, 옅은 글씨)
     boxElems.forEach(b => {
       if (b === selectedBox) return;
       const otherOutcome = gameState.boxMapping[parseInt(b.dataset.box, 10)];
@@ -104,7 +115,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     addRoundLog(boxId, outcome, gameState.round);
-
     totalScoreEl.textContent = totalScore.toString();
 
     if (gameState.round === 1) {
@@ -119,6 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // ----------------- 점수 계산 -----------------
   function applyReward(r) {
     if (r === "+1") totalScore += 1;
     else if (r === "+3") totalScore += 3;
@@ -127,28 +138,28 @@ document.addEventListener("DOMContentLoaded", () => {
     // MISS는 변화 없음
   }
 
+  // ----------------- 박스 비주얼 -----------------
+
+  // 선택한 박스: 중앙에 결과만, 진한 텍스트
   function openBoxVisual(boxEl, outcome) {
     boxEl.classList.add("opened");
     const label = boxEl.querySelector(".gift-label");
-    label.textContent = outcome;
+    label.classList.remove("dimmed");
+    label.textContent = outcome; // 예: +3, x2, MISS
 
-    let span = boxEl.querySelector(".gift-outcome");
-    if (!span) {
-      span = document.createElement("div");
-      span.className = "gift-outcome";
-      boxEl.appendChild(span);
-    }
-    span.textContent = `→ ${describeOutcome(outcome)}`;
+    // 예전 흰 글씨 안내 제거
+    const extra = boxEl.querySelector(".gift-outcome");
+    if (extra) extra.remove();
   }
 
+  // 선택하지 않은 박스: 결과만, 옅은 텍스트
   function revealOutcome(boxEl, outcome) {
-    let span = boxEl.querySelector(".gift-outcome");
-    if (!span) {
-      span = document.createElement("div");
-      span.className = "gift-outcome";
-      boxEl.appendChild(span);
-    }
-    span.textContent = describeOutcome(outcome);
+    const label = boxEl.querySelector(".gift-label");
+    label.textContent = describeOutcome(outcome); // 예: +3점, 점수 2배, MISS
+    label.classList.add("dimmed");
+
+    const extra = boxEl.querySelector(".gift-outcome");
+    if (extra) extra.remove();
   }
 
   function describeOutcome(o) {
@@ -160,9 +171,11 @@ document.addEventListener("DOMContentLoaded", () => {
     return o;
   }
 
+  // ----------------- 로그 / 최종 결과 -----------------
   function addRoundLog(boxId, outcome, round) {
     const mapping = gameState.boxMapping;
-    const others = [1,2,3].filter(x => x !== boxId)
+    const others = [1, 2, 3]
+      .filter(x => x !== boxId)
       .map(x => `BOX ${x}:${describeOutcome(mapping[x])}`)
       .join(", ");
 
@@ -204,6 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
      `;
   }
 
+  // ----------------- 보상 셔플 (새 보상 구성 + 파도타기) -----------------
   function rewardShuffle() {
     if (gameState.hasUsedRewardShuffle) return;
     if (gameState.hasOpenedThisRound) return;
@@ -212,16 +226,23 @@ document.addEventListener("DOMContentLoaded", () => {
     rewardShuffledEl.textContent = "✅";
 
     const currentRound = gameState.round;
+
+    // 보상 3개 다시 뽑기
     initRound();
     gameState.round = currentRound;
     roundEl.textContent = currentRound.toString();
     roundStatusEl.textContent = `라운드 ${currentRound}: 보상이 새로 섞였습니다.`;
+
+    // 파도타기 애니메이션
+    animateRewardWave();
   }
 
+  // ----------------- 위치 셔플 (야바위) -----------------
   function positionShuffle() {
     if (gameState.positionShuffleLeft <= 0) return;
     if (gameState.hasOpenedThisRound) return;
 
+    // 실제 보상 매핑 먼저 섞기
     const values = [
       gameState.boxMapping[1],
       gameState.boxMapping[2],
@@ -233,26 +254,83 @@ document.addEventListener("DOMContentLoaded", () => {
       2: values[1],
       3: values[2]
     };
+
     gameState.positionShuffleLeft -= 1;
     posShuffleLeftEl.textContent = gameState.positionShuffleLeft.toString();
 
     roundStatusEl.textContent = `박스 위치가 섞였습니다! 눈으로 잘 따라가 보세요.`;
 
-    // 야바위 애니메이션
-    boxElems.forEach(b => {
-      b.classList.remove("yabawi");
-      void b.offsetWidth; // 애니메이션 재시작을 위한 리플로우
-      b.classList.add("yabawi");
+    // 야바위형 실제 이동 애니메이션
+    animateGiftShuffle(3);
+  }
+
+  // ----------------- 애니메이션 -----------------
+
+  // 보상 셔플 시: 왼쪽 → 오른쪽 파도타기
+  function animateRewardWave() {
+    const boxes = Array.from(boxElems);
+    boxes.forEach((box, idx) => {
       setTimeout(() => {
-        b.classList.remove("yabawi");
-      }, 700);
+        box.classList.add("reward-wave");
+        setTimeout(() => {
+          box.classList.remove("reward-wave");
+        }, 260);
+      }, idx * 120);
     });
   }
 
+  // 위치 셔플 시: 두 박스씩 실제로 교차 이동
+  function animateGiftShuffle(swaps = 3, doneCallback) {
+    const boxes = Array.from(boxElems);
+    let step = 0;
+
+    function doOneSwap() {
+      if (step >= swaps) {
+        if (typeof doneCallback === "function") doneCallback();
+        return;
+      }
+
+      let i = getRandomInt(0, boxes.length - 1);
+      let j = getRandomInt(0, boxes.length - 1);
+      if (j === i) j = (j + 1) % boxes.length;
+
+      const boxA = boxes[i];
+      const boxB = boxes[j];
+
+      const rectA = boxA.getBoundingClientRect();
+      const rectB = boxB.getBoundingClientRect();
+      const dxA = rectB.left - rectA.left;
+      const dxB = rectA.left - rectB.left;
+
+      boxA.style.transition = "transform 0.25s ease";
+      boxB.style.transition = "transform 0.25s ease";
+
+      boxA.style.transform = `translate(${dxA}px, -6px)`;
+      boxB.style.transform = `translate(${dxB}px, -6px)`;
+
+      setTimeout(() => {
+        boxA.style.transition = "";
+        boxB.style.transition = "";
+        boxA.style.transform = "";
+        boxB.style.transform = "";
+
+        step += 1;
+        setTimeout(doOneSwap, 80);
+      }, 260);
+    }
+
+    doOneSwap();
+  }
+
+  // ----------------- 유틸 함수 -----------------
   function shuffle(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
+  }
+
+  function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 });

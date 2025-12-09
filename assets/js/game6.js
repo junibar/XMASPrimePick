@@ -68,27 +68,27 @@ document.addEventListener("DOMContentLoaded", () => {
   const PACK_TIER_RULES = {
     SS: {
       allowed: [1, 2],
-      weights: [0.6, 0.4],
+      weights: [0.7, 0.3],
       min: { 1: 2 },           // 1티어 최소 2장
     },
     S: {
       allowed: [1, 2, 3],
-      weights: [0.4, 0.4, 0.2],
+      weights: [0.5, 0.3, 0.2],
       min: { 1: 1, 2: 1 },     // 1티어 1장, 2티어 1장 이상
     },
     A: {
       allowed: [1, 2, 3],
-      weights: [0.2, 0.4, 0.4],
+      weights: [0.3, 0.3, 0.4],
       min: { 2: 1, 3: 1 },     // 2티어 1장, 3티어 1장 이상
     },
     B: {
       allowed: [2, 3],
-      weights: [0.4, 0.6],
+      weights: [0.5, 0.5],
       min: { 2: 1, 3: 1 },     // 2티어 1장, 3티어 1장 이상
     },
     C: {
       allowed: [2, 3],
-      weights: [0.2, 0.8],
+      weights: [0.3, 0.7],
       min: { 3: 2 },           // 3티어 최소 2장
     },
   };
@@ -383,7 +383,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function animateShellShuffle(initial = false) {
-    const swaps = initial ? 3 : 2; // 처음엔 3번, 추가 셔플엔 2번 정도
+    const swaps = initial ? 5 : 3; // 처음엔 5번, 추가 셔플엔 3번 정도
     let step = 0;
 
     function doOneSwap() {
