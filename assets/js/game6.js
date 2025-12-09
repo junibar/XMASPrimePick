@@ -306,6 +306,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 약간의 딜레이 후 실제 셔플
     setTimeout(() => {
+    // 논리적으로도 팩 순서를 섞어준다
       animateShellShuffle(true);
       initialShuffleDone = true;
       extraShuffleBtn.disabled = false;
@@ -327,7 +328,6 @@ document.addEventListener("DOMContentLoaded", () => {
     shellStatusEl.textContent = "추가 셔플을 진행합니다...";
     appendLog("야바위: 추가 셔플 1회 사용");
 
-    cupPacks = shuffle([...cupPacks]);
     animateShellShuffle(false);
   });
 
@@ -338,8 +338,8 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // 컵 안에 들어갈 팩 구성 (셔플된 상태로 기억)
-    cupPacks = shuffle([...currentPackArray]);
+    // 처음 구성을 보여주는 용도
+    cupPacks = [...currentPackArray];
 
     shellInitialReady = true;
     initialShuffleDone = false;
@@ -400,6 +400,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const rectB = cupB.getBoundingClientRect();
       const dxA = rectB.left - rectA.left;
       const dxB = rectA.left - rectB.left;
+
+      // 🔹 논리 데이터도 같이 섞기 (여기가 핵심)
+      if (Array.isArray(cupPacks) && cupPacks.length === shellCups.length) {
+      const tmp = cupPacks[i];
+      cupPacks[i] = cupPacks[j];
+      cupPacks[j] = tmp;
+      }
 
       cupA.style.transition = "transform 0.25s ease";
       cupB.style.transition = "transform 0.25s ease";
