@@ -242,7 +242,7 @@ textarea.field-input:focus {
 .goal-cell {
   position: relative;
   border-radius: 14px;
-  padding: 16px 8px;
+  padding: 16px 12px;
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.2);
   cursor: pointer;
@@ -287,8 +287,8 @@ textarea.field-input:focus {
 }
 
 .gift-box {
-  width: 90px;
-  height: 90px;
+  width: 120px;
+  height: 120px;
   border-radius: 18px;
   background: linear-gradient(135deg, #ff6f61, #ff9966);
   position: relative;
@@ -337,18 +337,28 @@ textarea.field-input:focus {
   margin-top: 4px;
 }
 
-/* 야바위 애니메이션 */
-@keyframes yabawi-shake {
-  0%   { transform: translateX(0); }
-  20%  { transform: translateX(-6px); }
-  40%  { transform: translateX(6px); }
-  60%  { transform: translateX(-4px); }
-  80%  { transform: translateX(4px); }
-  100% { transform: translateX(0); }
+.gift-label.dimmed {
+  opacity: 0.6;
 }
 
-.gift-box.yabawi {
-  animation: yabawi-shake 0.6s ease-in-out;
+/* 보상 셔플 파도타기 애니메이션 */
+.gift-box.reward-wave {
+  animation: gift-wave 0.26s ease-out;
+}
+
+@keyframes gift-wave {
+  0% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+  }
+  40% {
+    transform: translateY(-6px) scale(1.06);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.8);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+  }
 }
 
 /* ===== 게임 3: 아이콘 빠칭코 ===== */
