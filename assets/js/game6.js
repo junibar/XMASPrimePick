@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let phase = "pinball";
 
   // 핀볼 상수
-  const PINBALL_ROWS = 8;   // 8칸 떨어지도록
+  const PINBALL_ROWS = 8;   // 8칸
   const PINBALL_COLS = 10;
 
   // 핀볼 상태
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let cardChoiceMade = false;
   let chosenCardIndex = null;
 
-  // 라인 → 팩 구성
+  // 라인 → 팩 구성 (각 컵 아래에 들어갈 팩 타입)
   const PACK_CONFIG_BY_LINE = {
     D: ["SS", "S", "S", "A", "A"],
     G: ["S", "S", "A", "A", "B"],
@@ -57,20 +57,40 @@ document.addEventListener("DOMContentLoaded", () => {
     B: ["A", "A", "B", "B", "C"],
   };
 
-  // 팩 등급별 티어 분포 (5장)
-  const PACK_TIER_DISTRIBUTION = {
-    SS: [1, 1, 1, 2, 2],
-    S:  [1, 1, 2, 2, 3],
-    A:  [1, 2, 2, 3, 3],
-    B:  [2, 2, 3, 3, 3],
-    C:  [2, 3, 3, 3, 3],
-  };
-
   // 티어별 오버롤 후보
   const TIER_OVR = {
     1: [89],
     2: [88, 87],
     3: [86, 85, 84],
+  };
+
+  // 팩별 티어 규칙 (허용 티어, 가중치, 최소 쿼터)
+  const PACK_TIER_RULES = {
+    SS: {
+      allowed: [1, 2],
+      weights: [0.6, 0.4],
+      min: { 1: 2 },           // 1티어 최소 2장
+    },
+    S: {
+      allowed: [1, 2, 3],
+      weights: [0.4, 0.4, 0.2],
+      min: { 1: 1, 2: 1 },     // 1티어 1장, 2티어 1장 이상
+    },
+    A: {
+      allowed: [1, 2, 3],
+      weights: [0.2, 0.4, 0.4],
+      min: { 2: 1, 3: 1 },     // 2티어 1장, 3티어 1장 이상
+    },
+    B: {
+      allowed: [2, 3],
+      weights: [0.4, 0.6],
+      min: { 2: 1, 3: 1 },     // 2티어 1장, 3티어 1장 이상
+    },
+    C: {
+      allowed: [2, 3],
+      weights: [0.2, 0.8],
+      min: { 3: 2 },           // 3티어 최소 2장
+    },
   };
 
   // 라인 라벨
@@ -260,7 +280,7 @@ document.addEventListener("DOMContentLoaded", () => {
   shellCups.forEach(cup => {
     cup.addEventListener("click", () => {
       if (phase !== "shell") return;
-      if (!initialShuffleDone) return; // 야바~위 전에는 선택 불가
+      if (!initialShuffleDone) return; // '야바~위' 전에는 선택 불가
       if (shellChoiceMade) return;
       if (!cupPacks || cupPacks.length !== 5) return;
 
@@ -318,7 +338,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // 컵 안에 들어갈 팩 구성 (이미 셔플된 상태로 기억)
+    // 컵 안에 들어갈 팩 구성 (셔플된 상태로 기억)
     cupPacks = shuffle([...currentPackArray]);
 
     shellInitialReady = true;
@@ -470,15 +490,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function setupCardsForPack(packTier) {
     resetCardUI();
-    if (!packTier || !PACK_TIER_DISTRIBUTION[packTier]) {
+    if (!packTier) {
       finalEl.innerHTML =
         "카드팩 정보에 오류가 있습니다. 페이지를 새로고침해 주세요.";
       return;
     }
 
-    // 티어 리스트 복사 후 랜덤 셔플 → 카드 순서 랜덤
-    let tierList = [...PACK_TIER_DISTRIBUTION[packTier]];
-    tierList = shuffle(tierList);
+    // 확률 + 쿼터 기반 티어 생성
+    const tierList = generateTierListForPack(packTier, 5);
 
     cards = tierList.map(tier => {
       const candidates = TIER_OVR[tier] || [];
@@ -534,6 +553,57 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       phase = "done";
     }, 1000);
+  }
+
+  // ---------- 팩 → 티어 리스트 생성 (확률 + 최소 쿼터) ----------
+
+  function weightedChoice(tiers, weights) {
+    const sum = weights.reduce((a, b) => a + b, 0);
+    let r = Math.random() * sum;
+    for (let i = 0; i < tiers.length; i++) {
+      r -= weights[i];
+      if (r <= 0) return tiers[i];
+    }
+    return tiers[tiers.length - 1];
+  }
+
+  function generateTierListForPack(packTier, cardCount = 5) {
+    const rule = PACK_TIER_RULES[packTier];
+    if (!rule) {
+      // 안전 장치: 모르는 팩이면 전부 3티어
+      const fallback = [];
+      for (let i = 0; i < cardCount; i++) fallback.push(3);
+      return shuffle(fallback);
+    }
+
+    const { allowed, weights, min } = rule;
+    const result = [];
+    const counts = {};
+    let used = 0;
+
+    // 1) 최소 쿼터 먼저 채우기
+    if (min) {
+      for (const tierStr in min) {
+        const tier = parseInt(tierStr, 10);
+        const need = min[tierStr];
+        for (let i = 0; i < need && used < cardCount; i++) {
+          result.push(tier);
+          counts[tier] = (counts[tier] || 0) + 1;
+          used++;
+        }
+      }
+    }
+
+    // 2) 나머지 슬롯은 확률적으로 채우기
+    while (used < cardCount) {
+      const tier = weightedChoice(allowed, weights);
+      result.push(tier);
+      counts[tier] = (counts[tier] || 0) + 1;
+      used++;
+    }
+
+    // 3) 위치 셔플 (왼쪽/오른쪽 위치까지 랜덤)
+    return shuffle(result);
   }
 
   // ---------- 공용 함수 ----------
