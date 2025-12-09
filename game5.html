@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>🦌 루돌프 숫자 레이스</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div class="snow-overlay"></div>
+  <div class="main-container">
+    <div class="page-card">
+      <div class="top-controls">
+        <button class="home-btn" onclick="goHome()">🏠 홈으로</button>
+        <button class="reset-btn" onclick="resetGame()">🔄 게임 리셋</button>
+      </div>
+
+      <header class="page-header">
+      <h1 class="page-title">🦌 루돌프 숫자 레이스</h1>
+      <p class="page-subtitle">
+        1, 2, 3 중 하나의 달리기 모드를 선택해 루돌프를 8칸 트랙 끝까지 보내세요.<br>
+        숫자가 클수록 멀리 가지만 성공 확률이 떨어지고, 실패시 그 숫자만큼 체력이 소모됩니다.<br>
+        체력이 0이 되기 전에 8칸에 도달하면 성공, 그렇지 않으면 0점입니다.
+      </p>
+    </header>
+
+      <div class="section-row">
+        <!-- 왼쪽: 레이스 진행 -->
+        <section class="panel">
+          <div class="panel-title">레이스 진행</div>
+
+          <div class="field-group" style="margin-bottom:10px;">
+            <span class="field-label">트랙 상태</span>
+            <div class="race-track">
+              <div class="race-track-fill" id="g5-trackFill"></div>
+              <div class="rudolph-icon" id="g5-rudolph">🦌</div>
+            </div>
+            <div style="font-size:0.8rem; display:flex; justify-content:space-between; margin-top:4px;">
+              <span>현재 위치: <span id="g5-position">0</span> / 8</span>
+              <span>진행 턴: <span id="g5-turn">0</span></span>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <span class="field-label">체력</span>
+            <div class="stamina-row">
+              <div class="stamina-bar">
+                <div class="stamina-fill" id="g5-staminaFill"></div>
+              </div>
+              <span class="stamina-text">
+                <span id="g5-staminaValue">7</span> / 7
+              </span>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <span class="field-label">숫자 선택 (1 / 2 / 3)</span>
+            <div style="display:flex; gap:8px; margin-top:4px;">
+              <button class="btn-primary" data-choice="1">1</button>
+              <button class="btn-primary" data-choice="2">2</button>
+              <button class="btn-primary" data-choice="3">3</button>
+            </div>
+          </div>
+
+          <div class="result-block" id="g5-status" style="margin-top:10px;">
+            루돌프를 출발시켜 보세요. 숫자를 선택하면 턴이 진행됩니다.
+          </div>
+        </section>
+
+        <!-- 오른쪽: 로그 + 최종 결과 -->
+        <section class="panel">
+          <div class="panel-title">턴 로그</div>
+          <div class="game-log" id="g5-log"></div>
+
+          <hr style="border-color:rgba(255,255,255,0.1); margin:8px 0;">
+
+          <div class="panel-title">게임 최종 결과</div>
+          <div id="g5-final" class="result-block" style="font-size:0.85rem;">
+            아직 게임이 진행 중입니다.
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/game5.js"></script>
+</body>
+</html>

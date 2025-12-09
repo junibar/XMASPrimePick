@@ -552,3 +552,326 @@ textarea.field-input:focus {
   border: 1px solid rgba(255,255,255,0.2);
   font-size: 0.85rem;
 }
+
+/* ===== 게임 5: 루돌프 숫자 레이스 ===== */
+
+.race-track {
+  width: 100%;
+  height: 16px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.12);
+  position: relative;
+  overflow: hidden;
+}
+
+.race-track-fill {
+  position: absolute;
+  inset: 0;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ffeaa7, #fab1a0);
+  transition: width 0.25s ease-out;
+}
+
+.rudolph-icon {
+  position: absolute;
+  top: -12px;
+  transform: translateX(-50%);
+  font-size: 18px;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+  transition: left 0.25s ease-out;
+}
+
+/* 체력 표시 */
+
+.stamina-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stamina-bar {
+  flex: 1;
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  overflow: hidden;
+}
+
+.stamina-fill {
+  height: 100%;
+  width: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ff7675, #e74c3c);
+  transition: width 0.25s ease-out;
+}
+
+.stamina-text {
+  font-size: 0.8rem;
+}
+
+/* ===== 게임 6: 핀볼 셔플 드래프트 ===== */
+
+/* 핀볼 보드 */
+
+.pinball-board {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* 위쪽: 공이 떨어지는 격자 */
+
+.pinball-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-auto-rows: 18px;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 10px;
+  background: radial-gradient(circle at 20% 0, rgba(255,255,255,0.15), rgba(0,0,0,0.6));
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.7);
+}
+
+.pinball-cell {
+  position: relative;
+}
+
+/* 핀(peg) */
+
+.pinball-cell::before {
+  content: "";
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* 공 */
+
+.pinball-cell.ball::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ffeaa7;
+  box-shadow: 0 0 6px rgba(255,255,255,0.9);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* 아래쪽: 10개 슬롯 */
+
+.pinball-slots {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.pinball-slot {
+  position: relative;
+  height: 32px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.pinball-slot.pinball-hit {
+  box-shadow: 0 0 0 2px #ffeaa7;
+  background: radial-gradient(circle, rgba(255,255,255,0.4), rgba(255,255,255,0.08));
+}
+
+.pinball-line-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.pinball-line-label.line-D { color: #74b9ff; }
+.pinball-line-label.line-G { color: #ffeaa7; }
+.pinball-line-label.line-S { color: #dfe6e9; }
+.pinball-line-label.line-B { color: #b2bec3; }
+
+.pinball-controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+/* 야바위 - 컵 */
+
+.shell-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  justify-content: space-between;
+}
+
+.shell-cup {
+  flex: 1;
+  min-width: 0;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 6px;
+  text-align: center;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out,
+              background 0.15s ease-out, opacity 0.15s;
+}
+
+.shell-cup:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.45);
+}
+
+.shell-top {
+  position: relative;
+  height: 48px;
+  margin-bottom: 4px;
+  background-image: url("../img/cup.png"); /* CSS 기준 상대 경로 */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.shell-top span {
+  font-size: 0.7rem;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.7);
+  z-index: 1;
+}
+
+/* 컵이 열린 상태: 컵을 살짝 투명하게 → 아래 팩 강조 */
+
+.shell-cup.shell-open .shell-top {
+  opacity: 0.35;
+}
+
+.shell-pack {
+  min-height: 20px;
+  font-size: 0.8rem;
+}
+
+.shell-cup.shell-highlight {
+  box-shadow: 0 0 0 2px #ffeaa7;
+}
+
+.shell-cup.shell-dim {
+  opacity: 0.55;
+}
+
+/* 카드팩 집어넣는 모션 */
+
+.shell-cup.inserting .shell-top {
+  animation: cup-insert 0.35s ease-out;
+}
+
+@keyframes cup-insert {
+  0%   { transform: translateY(0); }
+  40%  { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+
+/* (원하면 유지 가능한 전체 행 흔들림) */
+
+.shell-row.shell-shuffling {
+  animation: shell-shake 0.5s ease-in-out;
+}
+
+@keyframes shell-shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-3px); }
+  100% { transform: translateX(0); }
+}
+
+.shell-controls {
+  margin-top: 6px;
+}
+
+/* 카드 뽑기 */
+
+.card-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+  justify-content: space-between;
+}
+
+.draft-card {
+  flex: 1;
+  min-width: 0;
+  perspective: 800px;
+  cursor: pointer;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  padding-top: 140%;
+  transform-style: preserve-3d;
+  transition: transform 0.4s ease;
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.card-back {
+  background: linear-gradient(135deg, #636e72, #2d3436);
+  color: #dfe6e9;
+}
+
+.card-front {
+  transform: rotateY(180deg);
+  background: radial-gradient(circle at 20% 20%, #ffeaa7, #fab1a0);
+  color: #2d3436;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.7);
+}
+
+.draft-card.card-revealed .card-inner {
+  transform: rotateY(180deg);
+}
+
+.draft-card.card-chosen .card-front {
+  box-shadow: 0 0 0 2px #ffeaa7, 0 6px 16px rgba(0,0,0,0.6);
+}
+
+.draft-card.card-dim {
+  opacity: 0.55;
+}
+
+.small-text {
+  font-size: 0.75rem;
+  opacity: 0.9;
+  margin-top: 4px;
+}
+
