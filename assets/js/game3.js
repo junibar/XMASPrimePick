@@ -31,8 +31,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const n = parseInt(spinCountEl.value, 10);
-    if (Number.isNaN(n) || n < 1 || n > 15) {
-      statusEl.textContent = "코인은 1~15 사이의 숫자여야 합니다.";
+    if (Number.isNaN(n) || n < 1 || n > 20) {
+      statusEl.textContent = "코인은 1~20 사이의 숫자여야 합니다.";
       return;
     }
 
@@ -178,4 +178,5 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
