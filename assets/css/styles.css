@@ -480,14 +480,18 @@ textarea.field-input:focus {
 
 /* 색상 규칙 */
 .player-1hit {
-  color: #c678dd; /* 보라 */
+  color: #d0fd94; /* 연두 */
 }
 
 .player-2hit {
-  color: #1abc9c; /* 민트 */
+  color: #c678dd; /* 보라 */
 }
 
 .player-3hit {
+  color: #1abc9c; /* 민트 */
+}
+
+.player-4hit {
   color: #f1c40f; /* 금색 */
 }
 
@@ -884,4 +888,5 @@ textarea.field-input:focus {
   opacity: 0.9;
   margin-top: 4px;
 }
+
 
