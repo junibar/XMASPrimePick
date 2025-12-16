@@ -156,9 +156,12 @@ document.addEventListener("DOMContentLoaded", () => {
       } else if (count === 2) {
         nameSpan.classList.add("player-2hit"); // 민트색
         bonusText = " +2";
-      } else if (count >= 3) {
-        nameSpan.classList.add("player-3hit"); // 금색
+       } else if (count === 3) {
+        nameSpan.classList.add("player-3hit"); // 민트색
         bonusText = " +3";
+      } else if (count >= 4) {
+        nameSpan.classList.add("player-4hit"); // 금색
+        bonusText = " +4";
         const star = document.createElement("span");
         star.className = "star-badge";
         star.textContent = "⭐";
@@ -175,3 +178,4 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
